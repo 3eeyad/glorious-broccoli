@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Video Player Example</title>
+        <link
+            href="https://vjs.zencdn.net/7.14.3/video-js.css"
+            rel="stylesheet"
+        />
+        <script src="https://vjs.zencdn.net/7.14.3/video.min.js"></script>
+    </head>
+
+    <body>
+        <video
+            id="my-video"
+            class="video-js vjs-default-skin"
+            controls
+            preload="auto"
+            width="640"
+            height="264"
+            data-setup='{"fluid": true}'
+        >
+            <source src="never_give_up.m3u8" type="application/x-mpegURL" />
+        </video>
+        <script>
+
+            let password = prompt("enter access password")
+
+                videojs.Hls.xhr.beforeRequest = function(options) {
+                    options.headers = options.headers || {};
+                    options.headers["X-Access-Token"] = password;
+                    console.log('options', options)
+                    return options;
+                };
+            
+            void videojs("my-video")
+        </script>
+
+        <code>
+            ffmpeg -i input.mp4 -c:v h264 -hls_time 3 -hls_key_info_file
+            secret.keyinfo never_give_up.m3u8
+        </code>
+    </body>
+</html>
